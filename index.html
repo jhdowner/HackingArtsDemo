@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Hacking Arts Demo</title>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600">
+</canvas>
+<script>
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  var centerX = canvas.width / 2;
+  var centerY = canvas.height / 2;
+  var outerRadius = 50;
+  var innerRadius = 30;
+  FPS = 15;
+
+  //
+  // Drawing Functions
+  //
+
+  // Draw white circle with center (x, y) and radius r
+  function drawCircle(x, y, r) {
+    context.beginPath();
+    context.lineWidth = 2;
+    context.strokeStyle = "#FFFFFF";
+    context.arc(x, y, r, 0, 2 * Math.PI, false);
+    context.stroke();
+  } 
+
+  // Draw black background
+  function drawBackground() {
+    context.fillStyle = "#000000";
+    context.fillRect(0, 0, 600, 600);
+    context.fill();
+  }
+
+  //
+  // Update/Draw Loop
+  //
+
+  function update() {
+    
+  }
+
+  function draw() {
+    drawBackground();
+    drawCircle(centerX, centerY, 50); // Outer circle
+    drawCircle(centerX, centerY, 30); // Inner circle
+  }
+
+  function runLoop() {
+    var loop;
+    draw();
+    update();
+    loop = setTimeout(function() {runLoop()}, 1000 / FPS);
+  }
+
+  runLoop();
+
+</script>
+</body>
+</html>
