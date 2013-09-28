@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>Hacking Arts Demo</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
+</script>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600">
+</canvas>
+<script>
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  var centerX = canvas.width / 2;
+  var centerY = canvas.height / 2;
+  var outerRadius = 50;
+  var innerRadius = 30;
+  FPS = 15;
+
+  // Circuits are object literals
+  // x - center x coordinate
+  // y - center y coordinate
+  // ir - inner radius
+  // or - outer radius
+  var circuits = [];
+
+  //
+  // Drawing Functions
+  //
+
+  // Draw white circle with center (x, y) and radius r
+  function drawCircle(x, y, r) {
+    context.beginPath();
+    context.lineWidth = 2;
+    context.strokeStyle = "#FFFFFF";
+    context.arc(x, y, r, 0, 2 * Math.PI, false);
+    context.stroke();
+  } 
+
+  // Draw circuit with center (x, y) and radii (ir, or)
+  function drawCircuit(x, y, ir, or) {
+    drawCircle(x, y, or);
+    drawCircle(x, y, ir);
+  }
+
+  function drawAllCircuits() {
+    for (i = 0; i < circuits.length; i++) {
+      c = circuits[i];
+      drawCircuit(c.x, c.y, c.ir, c.or);
+    }
+  }
+
+  // Draw every circuit in circuits array
+  
+
+  // Draw black background
+  function drawBackground() {
+    context.fillStyle = "#000000";
+    context.fillRect(0, 0, 600, 600);
+    context.fill();
+  }
+
+  //
+  // Event Handlers
+  //
+
+  function onClick(e) {
+    var offset = $('#canvas').offset();
+    var x = e.clientX - offset.top;
+    var y = e.clientY - offset.left;
+    console.log("x: " + x + " y: " + y);
+    
+    // If drawing a circle will not cause overlap with another
+    var permitDraw = true;
+    for (i = 0; i < circuits.length; i++) {
+      if (Math.sqrt(Math.pow(x - circuits[i].x, 2) + Math.pow(y - circuits[i].y, 2)) < outerRadius * 2) {
+        permitDraw = false;
+      }
+    }
+    if (permitDraw) {
+      console.log("Circuit added at " + x + ", " + y);
+      circuits.push({
+        x: x, 
+        y: y, 
+        ir: innerRadius, 
+        or: outerRadius 
+      });
+    }
+
+  } 
+
+  //
+  // Update/Draw Loop
+  //
+
+  function update() {
+    
+  }
+
+  function draw() {
+    drawBackground();
+    drawAllCircuits();
+  }
+
+  function runLoop() {
+    var loop;
+    draw();
+    update();
+    loop = setTimeout(function() {runLoop()}, 1000 / FPS);
+  }
+
+  canvas.addEventListener("click", onClick, false);
+  runLoop();
+
+</script>
+</body>
+</html>
